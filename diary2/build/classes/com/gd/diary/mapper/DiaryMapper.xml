@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gd.diary.mapper.DiaryMapper">
+	<select id="selectTodoByDate" parameterType="java.util.Map" resultType="com.gd.diary.vo.Todo">
+		SELECT DAY(todo_date) todoDate, todo_no todoNo, todo_font_color todoFontColor, LEFT(todo_title, 10) todoTitle FROM todo WHERE member_no=#{memberNo} AND YEAR(todo_date)=#{targetYear} AND MONTH(todo_date)=#{targetMonth}
+	</select>
+	<select id="selectTodoOne" parameterType="int" resultType="java.util.Map">
+		SELECT todo_no todoNo, member_no memberNo, todo_font_color todoFontColor, todo_date todoDate, todo_title todoTitle, todo_content todoContent, todo_add_date todoAddDate FROM todo WHERE todo_no=#{todoNo}
+	</select>
+	<select id="selectTodoDdayList" parameterType="int" resultType="java.util.Map">
+		SELECT todo_no todoNo, todo_date todoDate, todo_title todoTitle, DATEDIFF(todo_date, NOW()) dDay FROM todo WHERE todo_date > DATE(NOW()) AND member_no=#{memberNo} ORDER BY dDay LIMIT 10
+	</select>
+	<delete id="deleteTodoByMember" parameterType="int">
+		DELETE FROM member WHERE member_no=#{memberNo}
+	</delete>
+	<delete id="deleteTodoOne" parameterType="java.util.Map">
+		DELETE FROM todo WHERE todo_no=#{todoNo} AND member_no=#{memberNo}
+	</delete>
+	<insert id="insertTodo" parameterType="com.gd.diary.vo.Todo">
+		INSERT INTO todo(member_no, todo_date, todo_title, todo_content, todo_font_color, todo_add_date) VALUES(#{memberNo}, #{todoDate}, #{todoTitle}, #{todoContent}, #{todoFontColor}, NOW())
+	</insert>
+	<update id="updateTodoOne" parameterType="java.util.Map">
+		UPDATE todo SET todo_title=#{todoTitle}, todo_date=#{todoDate}, todo_content=#{todoContent}, todo_font_color=#{todoFontColor} WHERE todo_no=#{todoNo} AND member_no=#{memberNo}
+	</update>
+	
+</mapper>

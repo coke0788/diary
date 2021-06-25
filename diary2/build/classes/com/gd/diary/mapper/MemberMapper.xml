@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gd.diary.mapper.MemberMapper">
+	<select id="selectMemberByKey" parameterType="com.gd.diary.vo.Member" resultType="com.gd.diary.vo.Member">
+		SELECT member_no memberNo, member_id memberId FROM member WHERE member_id=#{memberId} AND member_pw=PASSWORD(#{memberPw})	
+	</select>
+	<select id="selectMember" parameterType="String" resultType="int">
+		SELECT COUNT(*) FROM member WHERE member_id=#{memberId}
+	</select>
+	<insert id="insertMember" parameterType="com.gd.diary.vo.Member">
+		INSERT INTO member(member_id, member_pw, member_date) VALUES(#{memberId}, PASSWORD(#{memberPw}), NOW())
+	</insert>
+	<delete id="deleteMemberByKey" parameterType="com.gd.diary.vo.Member">
+		DELETE FROM member WHERE member_no=#{memberNo} AND member_pw=PASSWORD(#{memberPw})
+	</delete>
+	<update id="updateMemberByKey" parameterType="com.gd.diary.vo.Member">
+		UPDATE member SET member_pw=PASSWORD(#{memberPw}) WHERE member_no=#{memberNo}
+	</update>
+</mapper>
